@@ -1,0 +1,22 @@
+===============
+Random Playlist
+===============
+
+Random playlist generates a playlist in some format by recursively
+scanning a directory looking for specified files.
+
+Typical usage::
+
+    #!/usr/bin/env python
+
+    from randomplaylist.generator import PlaylistGenerator
+    
+    generator = PlaylistGenerator(allowed_extensions=(
+                            '.mp4', '.mkv', '.m4v', '.mov'))
+    
+    files_list = generator.make_list()
+    generator.save_list()
+    
+    for f in files_list:
+        print f
+

@@ -1,0 +1,12 @@
+===========
+GO! Mplayer
+===========
+
+A helper script to make mplayer useable by my girlfriend.
+
+Just now can configure the -vo and -vc options for her based on
+file extension in json config file setup.
+
+Best way to use: Add application launcher to gnome-panel and drag+drop video on.
+
+Relies on defaults for full screen and such in ~/.mplayer/config

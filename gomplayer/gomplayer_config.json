@@ -1,0 +1,10 @@
+{
+    "mkv": {
+        "vo": "vdpau",
+        "vc": "ffh264vdpau"
+    },
+    "mov": {
+        "vo": "vdpau",
+        "vc": "ffh264vdpau"
+    }
+}
