@@ -1,0 +1,12 @@
+================
+Random Wallpaper
+================
+
+I needed this as other solutions were a little too complicated for my
+liking.
+
+Picks a random wallpaper from my dropbox directory and changes gnome
+wallpaper for that.
+
+I run it on cron to change at intervals, alternatively it works well
+run from a launcher.

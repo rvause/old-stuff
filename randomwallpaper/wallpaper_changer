@@ -1,0 +1,17 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os
+import random
+import sys
+ 
+WALLPAPER_DIR = os.path.join(os.path.expanduser('~'), 'Dropbox/Wallpapers')
+ 
+if len(sys.argv) > 1:
+    wallpaper = sys.argv[1]
+else:
+    walls = os.listdir(WALLPAPER_DIR)
+    wallpaper = os.path.join(WALLPAPER_DIR, walls[random.randint(0, len(walls)-1)])
+
+if os.path.exists(wallpaper):
+    os.system('gconftool-2 -s -t string /desktop/gnome/background/picture_filename "%s"' % wallpaper)
+
