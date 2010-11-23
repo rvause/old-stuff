@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import os
+import random
+import time
+import subprocess
+
+WALLPAPER_DIR = os.path.join(os.path.expanduser('~'), 'Dropbox/Wallpapers')
+
+
+def set_wall(screen, walls):
+    wallpaper = os.path.join(WALLPAPER_DIR, walls[random.randint(0, len(walls)-1)])
+    if os.path.exists(wallpaper):
+        try:
+            return subprocess.check_call(['xfconf-query', \
+                                '-t', 'string', \
+                                '-c', 'xfce4-desktop', \
+                                '-p', '/backdrop/screen0/monitor%s/image-path' % screen, \
+                                '-s', '%s' % wallpaper])
+        except subprocess.CalledProcessError:
+            return 'Something went wrong...'
+
+
+if __name__ == '__main__':
+    while True:
+        time.sleep(300)
+        walls = os.listdir(WALLPAPER_DIR)
+        set_wall(0, walls)
+        set_wall(1, walls)
+
