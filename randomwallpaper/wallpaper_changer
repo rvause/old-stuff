@@ -2,16 +2,65 @@
 # -*- coding: utf-8 -*-
 import os
 import random
+import time
+import subprocess
 import sys
- 
-WALLPAPER_DIR = os.path.join(os.path.expanduser('~'), 'Dropbox/Wallpapers')
- 
-if len(sys.argv) > 1:
-    wallpaper = sys.argv[1]
-else:
+import argparse
+
+WALLPAPER_DIR = os.path.join(os.path.expanduser('~'), 'Ubuntu One/Wallpapers')
+DEFAULT = '/usr/share/backgrounds/warty-final-ubuntu.png'
+
+
+def set_wall(wallpaper):
+    if os.path.exists(wallpaper):
+        try:
+            return subprocess.check_call(['gconftool-2', '-s',
+                                    '-t', 'string',
+                                    '/desktop/gnome/background/picture_filename',
+                                    '%s' % wallpaper])
+        except subprocess.CalledProcessError:
+            return 'Something went wrong...'
+                
+
+def run(delay):
+    while True:
+        time.sleep(delay)
+        walls = os.listdir(WALLPAPER_DIR)
+        wallpaper = os.path.join(WALLPAPER_DIR, walls[random.randint(0, len(walls)-1)])
+        set_wall(wallpaper)
+
+
+def random_wall():
     walls = os.listdir(WALLPAPER_DIR)
     wallpaper = os.path.join(WALLPAPER_DIR, walls[random.randint(0, len(walls)-1)])
+    set_wall(wallpaper)
 
-if os.path.exists(wallpaper):
-    os.system('gconftool-2 -s -t string /desktop/gnome/background/picture_filename "%s"' % wallpaper)
+
+def main():
+    arg = argparse.ArgumentParser(prog='wallpaper_changer', \
+        usage='%(prog)s [options]', \
+        description='Change the Gnome Desktop wallper.')
+    arg.add_argument('--set', '-s', action='store_true', default=False, \
+        help='Set the wallpaper')
+    arg.add_argument('--wallpaper', '-w', action='store', default=DEFAULT, \
+        help='The wallpaper to set')
+    arg.add_argument('--background', '-b', action='store_true', default=False, \
+        help='Run in the background and set random wallpaper at interval')
+    arg.add_argument('--delay', '-d', action='store', type=int, default=300, \
+        help='Interval between setting random wallpaper')
+    arg.add_argument('--random', '-r', action='store_true', default=False, \
+        help='Set a random wallpaper')
+
+    options = arg.parse_args()
+    
+    if options.set:
+        set_wall(options.wallpaper)
+    elif options.random:
+        random_wall()
+    else:
+        run(options.delay)
+
+
+if __name__ == '__main__':
+    main()
 
