@@ -9,7 +9,7 @@ import subprocess
 def try_connect(host):
     parts = host.split(':', 3)
     command = ['sshpass', '-p', "'%s'" % parts[2].strip(), 'ssh', parts[0], \
-        '-p', parts[1], '"exit 0"']
+        '-p', parts[1], '-o', 'PubkeyAuthentication=no', '"exit 0"']
 #    for c in command:
 #        sys.stdout.write(c + ' ')
 #    sys.stdout.flush()
