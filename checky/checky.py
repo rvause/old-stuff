@@ -9,18 +9,18 @@ import subprocess
 def try_connect(host):
     parts = host.split(':', 3)
     command = ['sshpass', '-p', "'%s'" % parts[2].strip(), 'ssh', parts[0], \
-        '-p', parts[1], '-o', 'PubkeyAuthentication=no', '"exit 0"']
-#    for c in command:
-#        sys.stdout.write(c + ' ')
-#    sys.stdout.flush()
+        '-p', parts[1], '-o', 'PubkeyAuthentication=no', \
+        '-o', 'ConnectTimeout=10', \
+        '-o', 'StrictHostKeyChecking=no', '"exit 0"']
+
     try:
-        return subprocess.check_call(command, \
+        returncode = subprocess.check_call(command, \
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        code = '[%s]' % e.returncode
+        return '%s %s:%s' % (code.ljust(5), parts[0], parts[1])
     except subprocess.CalledProcessError, e:
-        if e.returncode <= 5:
-            return 'OK: %s:%s' % (parts[0], parts[1])
-        else:
-            return 'Error: Can\'t connect to %s:%s' % (parts[0], parts[1])
+        code = '[%s]' % e.returncode
+        return '%s %s:%s' % (code.ljust(5), parts[0], parts[1])
 
 
 def main():
